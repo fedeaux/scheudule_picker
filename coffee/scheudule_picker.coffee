@@ -13,7 +13,7 @@ class @ScheudulePicker
     
 
   change_markup: () ->
-    #@input.hide()
+    @input.hide()
     @input.after @create_selector()
 
   create_selector: () ->

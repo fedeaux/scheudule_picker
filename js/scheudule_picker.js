@@ -34,6 +34,7 @@
     }
 
     ScheudulePicker.prototype.change_markup = function() {
+      this.input.hide();
       return this.input.after(this.create_selector());
     };
 
