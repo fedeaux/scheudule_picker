@@ -5,16 +5,26 @@
   id.substr 0, length
 
 class @ScheudulePicker
-  constructor: (selector) ->
+  constructor: (selector, @args = {}) ->
     @input = $ selector
     @id = 'scheudule_picker_'+unique_id()
 
     @change_markup()
-    
 
   change_markup: () ->
-    @input.hide()
-    @input.after @create_selector()
+    #@input.hide() <- tem que descomentar!
+
+    if @args.inline
+      @input.after @create_picker()
+      $('.scheudule_picker_ok', @picker).hide()
+
+      #   Não triga, não sei por que. No inline, ele tem que atualizar o input
+      # automaticamente
+      $('input', @picker).change () ->
+        console.log 'kct'
+  
+    else
+      @input.before @create_selector()
 
   create_selector: () ->
     @selector = $ @create_selector_markup()
@@ -34,7 +44,7 @@ class @ScheudulePicker
     @picker = @create_picker_markup()
     @picker.hide()
 
-    @selector.after @picker
+    @input.after @picker
     @check_for_previous_value()
 
     $('.scheudule_picker_add_row', @picker).click @add_row
@@ -55,7 +65,9 @@ class @ScheudulePicker
   ok: () =>
     json = @get_json_values()
     @input.val json
-    @picker.fadeOut()
+
+    unless @args.inline
+      @picker.fadeOut()
 
   get_json_values: () =>
     JSON.stringify @val()

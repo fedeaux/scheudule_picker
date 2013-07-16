@@ -2,7 +2,10 @@
 (function() {
 
   $(function() {
-    return new ScheudulePicker('#scheudule_picker');
+    new ScheudulePicker('#scheudule_picker');
+    return new ScheudulePicker('#inline_scheudule_picker', {
+      inline: true
+    });
   });
 
 }).call(this);

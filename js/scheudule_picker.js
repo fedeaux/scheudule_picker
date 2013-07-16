@@ -16,7 +16,8 @@
 
   this.ScheudulePicker = (function() {
 
-    function ScheudulePicker(selector) {
+    function ScheudulePicker(selector, args) {
+      this.args = args != null ? args : {};
       this.add_row_with_values = __bind(this.add_row_with_values, this);
 
       this.add_row = __bind(this.add_row, this);
@@ -28,14 +29,22 @@
       this.ok = __bind(this.ok, this);
 
       this.show_picker = __bind(this.show_picker, this);
+
       this.input = $(selector);
       this.id = 'scheudule_picker_' + unique_id();
       this.change_markup();
     }
 
     ScheudulePicker.prototype.change_markup = function() {
-      this.input.hide();
-      return this.input.after(this.create_selector());
+      if (this.args.inline) {
+        this.input.after(this.create_picker());
+        $('.scheudule_picker_ok', this.picker).hide();
+        return $('input', this.picker).change(function() {
+          return console.log('kct');
+        });
+      } else {
+        return this.input.before(this.create_selector());
+      }
     };
 
     ScheudulePicker.prototype.create_selector = function() {
@@ -59,7 +68,7 @@
     ScheudulePicker.prototype.create_picker = function() {
       this.picker = this.create_picker_markup();
       this.picker.hide();
-      this.selector.after(this.picker);
+      this.input.after(this.picker);
       this.check_for_previous_value();
       $('.scheudule_picker_add_row', this.picker).click(this.add_row);
       $('.scheudule_picker_ok', this.picker).click(this.ok);
@@ -84,7 +93,9 @@
       var json;
       json = this.get_json_values();
       this.input.val(json);
-      return this.picker.fadeOut();
+      if (!this.args.inline) {
+        return this.picker.fadeOut();
+      }
     };
 
     ScheudulePicker.prototype.get_json_values = function() {
